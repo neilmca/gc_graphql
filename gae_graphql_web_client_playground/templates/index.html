@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
+    <title>Search Demonstration App</title>
+
+
+    <style>
+       #container {
+        display: table;
+        }
+
+      #row  {
+        display: table-row;
+        }
+
+      #left, #right, #middle {
+        display: table-cell;
+        }
+    </style>
+
+
+  </head>
+  <body style="margin:20px;">
+
+    <form action="/query" method="post">
+      <div>GraphQL Query Playground</div>
+      <p/>
+      <div>Enter url to GraphQL Server</div>
+      <div><textarea name="gql_server_url" rows="1" cols="60">{{gql_server_url}}/</textarea></div>
+      <div>Enter auth token (remember_me)</div>
+      <div><textarea name="auth_token" rows="1" cols="120">{{auth_token}}</textarea></div>
+      <div>Enter X-User-Agent</div>
+      <div><textarea name="x_user_agent" rows="1" cols="60">{{x_user_agent}}</textarea></div>
+
+
+      <div id="container">
+        <div id="row">
+           <div id="left">
+            <div>GraphQL Query</div>
+            <div><textarea name="query" rows="30" cols="120">{{query}}</textarea></div>
+           </div>
+
+            <div id="right">
+               <div>Query Result:{{http_status}}</div>
+               <div><textarea rows="30" cols="120" readonly>{{query_results}}</textarea></div>
+            </div>
+
+        </div>
+    </div>
+
+
+      
+      <div><input type="submit" value="Execute Query or Mutation"/></div>
+      
+    </form>
+
+
+    
+    
+
+   
+  </body>
+</html>

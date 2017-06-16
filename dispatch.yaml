@@ -1,0 +1,5 @@
+ dispatch:
+ # Default service (which has been set to be gae_graphql_server)
+  - url: "*/*"
+    service: default
+
