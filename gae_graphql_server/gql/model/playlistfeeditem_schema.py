@@ -11,11 +11,11 @@ class PlaylistFeedItemSchema(graphene.ObjectType):
             self.schemaDict = {}
 
     id = graphene.String() 
-    def resolve_title(self, args, context, info):
+    def resolve_id(self, args, context, info):
         return self.schemaDict.get('id')
 
     title = graphene.String() 
-    def resolve_id(self, args, context, info):
+    def resolve_title(self, args, context, info):
         return self.schemaDict.get('title')
 
     description = graphene.String() 

@@ -36,7 +36,7 @@ def fetch_it(url, x_user_agent = 'not specified', payload = '', query_params_dic
 
 def fetch_get(url, x_user_agent = 'not specified', auth_token = 'not specified', query_params_dict = None):
 	try:
-		headers = {'X-User-Agent': x_user_agent, 'Authorization' : auth_token}
+		headers = {'X-User-Agent': x_user_agent, 'Authorization' : auth_token, 'Accept': 'application/json'}
 
 		if query_params_dict:
 			encoded_params = urllib.urlencode(query_params_dict)		

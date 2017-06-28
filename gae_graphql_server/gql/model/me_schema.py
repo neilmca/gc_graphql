@@ -4,7 +4,7 @@ import graphene
 from mesubscriptions_schema import MeSubscriptionsSchema
 from mefollowedplaylists_schema import MeFollowedPlaylistsSchema
 from meprofile_schema import MeProfileSchema
-from meaccountcheck import MeAccountCheckSchema
+from meaccountcheck_schema import MeAccountCheckSchema
 
 
 class MeSchema(graphene.ObjectType):

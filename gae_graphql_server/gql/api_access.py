@@ -64,6 +64,6 @@ def get_acc_check(user_token, x_user_agent, timestamp, user_name, device_uid):
 	url = CORE_BASE_URL + PATH 
 
 	query_params_dict = {'USER_TOKEN' : user_token, 'timestamp' : timestamp, 'USER_NAME' : user_name,  'DEVICE_UID' : device_uid}	
+	return  http_access.fetch_get(url, x_user_agent = x_user_agent, query_params_dict = query_params_dict)
 
-	return http_access.fetch_get(url, x_user_agent = x_user_agent, query_params_dict = query_params_dict)
 	
