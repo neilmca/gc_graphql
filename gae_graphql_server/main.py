@@ -6,7 +6,7 @@ import string
 import re
 import json
 
-
+from collections import OrderedDict
 from gql.schema import GraphQlSchemaSingleton
 from gql.middleware import AuthorizationMiddleware
 
@@ -43,53 +43,35 @@ class GraphQlApiGatewayHandler(BaseHandler):
    
     def get(self):
 
-        #path param 1  = total number of vouchers to assign as "used"
-
         
-
-        #E.g. http://localhost:8080assign=1000
-
-        path = re.sub('^/', '', self.request.path)
-        path = re.sub('/$', '', path)
-
-                
-        split = path.split('/')
-
-        logging.info(split)
-                 
         
-                               
-
-        self.response.write('ok')
+        self.response.write(json.dumps(GraphQlSchemaSingleton.get().schema.introspect()))
 
     def post(self):
         #execute the requested query
 
         
-        #get auth header
-        auth_token = None
-        AUTH_HEADER = 'Authorization'
-        if AUTH_HEADER in self.request.headers:
-            bearer_token = self.request.headers[AUTH_HEADER]
-            
-            if ' ' in bearer_token:
-                param, auth_token = bearer_token.split(' ',1)
-
-
-        if auth_token == None:
-            logging.info('WARNING - no auth token provided')
+        
 
         #get x-user-agent
-        x_user_agent = ''
-        X_USER_AGENT_HEADER = 'X-User-Agent'
-        if X_USER_AGENT_HEADER in self.request.headers:
-            x_user_agent = self.request.headers[X_USER_AGENT_HEADER]
-        
+        x_user_agent = self.request.headers.get('X-User-Agent')
         if x_user_agent == None:
             logging.info('WARNING - no x_user_agent provided')
 
+        #get core_server_url
+        core_server_url = self.request.headers.get('core_server_url')        
+        if core_server_url == None:
+            logging.info('WARNING - no core_server_url provided')
 
-        ctx_value = {'auth_token': auth_token, 'x_user_agent': x_user_agent}
+        #get pls_server_url
+        pls_server_url = self.request.headers.get('pls_server_url')        
+        if pls_server_url == None:
+            logging.info('WARNING - no pls_server_url provided')
+
+
+
+
+        ctx_value = {'x_user_agent': x_user_agent, 'pls_server_url' : pls_server_url, 'core_server_url': core_server_url}
 
 
         #result = GraphQlSchemaSingleton.get().schema.execute(self.request.body, middleware = [AuthorizationMiddleware()], context_value=ctx_value)

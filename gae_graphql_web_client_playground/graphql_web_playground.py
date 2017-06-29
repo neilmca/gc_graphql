@@ -41,14 +41,16 @@ class BaseHandler(webapp2.RequestHandler):
 
 
 X_USER_AGENT = 'x_user_agent'
-AUTH_TOKEN = 'auth_token'
 QUERY = 'query'
 GQL_SERVER_URL = 'gql_server_url'
+CORE_SERVER_URL = 'core_server_url'
+PLS_SERVER_URL = 'pls_server_url'
 
-AUTH_TOKEN_DEFAULT_VALUE = ''
 QUERY_DEFAULT_VALUE = ''
 X_USER_AGENT_DEFAULT_VALUE = 'mtv-trax/3.10 (Android; mtv1)'
 GQL_SERVER_URL_DEFAULT_VALUE = 'http://localhost:8081'
+CORE_SERVER_URL_DEFAULT_VALUE = 'https://mtv-cherry.musicqubed.com/transport/service/mtv1/7.2'
+PLS_SERVER_URL_DEFAULT_VALUE = 'https://mq-media-cms-qa.appspot.com/api/mtv1'
 
 
 def json_dump(js_string):
@@ -66,11 +68,6 @@ class MainPage(BaseHandler):
         else:
             x_user_agent = X_USER_AGENT_DEFAULT_VALUE
 
-        auth_token = None
-        if AUTH_TOKEN in self.request.GET:
-            auth_token = self.request.GET[AUTH_TOKEN]
-        else:
-            auth_token = AUTH_TOKEN_DEFAULT_VALUE
 
         query = None
         if QUERY in self.request.GET:
@@ -86,7 +83,23 @@ class MainPage(BaseHandler):
         else:
             gql_server_url = GQL_SERVER_URL_DEFAULT_VALUE
 
-        #logging.info('auth_token = %s' % auth_token)
+        core_server_url = None
+        if CORE_SERVER_URL in self.request.GET:
+            core_server_url = self.request.GET[CORE_SERVER_URL]
+            #strip trailing /
+            core_server_url = core_server_url.rstrip('/')
+        else:
+            core_server_url = CORE_SERVER_URL_DEFAULT_VALUE
+
+        pls_server_url = None
+        if PLS_SERVER_URL in self.request.GET:
+            pls_server_url = self.request.GET[PLS_SERVER_URL]
+            #strip trailing /
+            pls_server_url = pls_server_url.rstrip('/')
+        else:
+            pls_server_url = PLS_SERVER_URL_DEFAULT_VALUE
+
+
         #logging.info('x_user_agent = %s' % x_user_agent)
         #logging.info('query = %s' % query)
         #logging.info('gql_server_url = %s' % gql_server_url)
@@ -96,7 +109,7 @@ class MainPage(BaseHandler):
         content = '{}'
         status = ''
         if x_user_agent != '' and query != '' and gql_server_url != '':
-            status, content = http_post.fetch_post(url = gql_server_url, auth_token = auth_token, x_user_agent = x_user_agent, query = query)
+            status, content = http_post.fetch_post(gql_url = gql_server_url, core_server_url = core_server_url, pls_server_url = pls_server_url, x_user_agent = x_user_agent, query = query)
             
         content_formatted = ''
         try:
@@ -106,12 +119,14 @@ class MainPage(BaseHandler):
         
         template_values = {
             X_USER_AGENT : x_user_agent,
-            AUTH_TOKEN : auth_token,
             QUERY : query,
             GQL_SERVER_URL : gql_server_url,
+            CORE_SERVER_URL : core_server_url,
+            PLS_SERVER_URL : pls_server_url,
             'query_results': content_formatted,
             'http_status' : status
         }
+        logging.info(template_values)
         self.render_template('index.html', template_values)
 
 
@@ -127,14 +142,13 @@ class Query(BaseHandler):
 
           
 
-        auth_token = self.request.get(AUTH_TOKEN)
         x_user_agent = self.request.get(X_USER_AGENT)
         query = self.request.get(QUERY)
         gql_server_url = self.request.get(GQL_SERVER_URL)
 
 
 
-        #logging.info('auth_token = %s' % auth_token)
+        
         #logging.info('x_user_agent = %s' % x_user_agent)
         #logging.info('query = %s' % query)
         #logging.info('gql_server_url = %s' % gql_server_url)
@@ -144,7 +158,7 @@ class Query(BaseHandler):
         
         if query and x_user_agent:
             self.redirect('/?' + urllib.urlencode(
-                {X_USER_AGENT: x_user_agent.encode('utf-8'), AUTH_TOKEN : auth_token, QUERY : queryb64,  GQL_SERVER_URL : gql_server_url}))
+                {X_USER_AGENT: x_user_agent.encode('utf-8'), QUERY : queryb64,  GQL_SERVER_URL : gql_server_url}))
         else:
             self.redirect('/')
 
@@ -155,6 +169,7 @@ application = webapp2.WSGIApplication(
     [('/', MainPage),
      ('/query', Query)],
     debug=True)
+
 
 
 

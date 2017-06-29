@@ -3,18 +3,19 @@ import graphene
 from .. import api_access
 import json
 from ..model.error_schema import ErrorsSchema
+from ..helpers.service_urls_helper import Helpers
 
 
 
 class CreateInstallationMutation(graphene.Mutation):
 
-    def __init__(self, context, inputDict):
+    def __init__(self, service_urls, x_user_agent, inputDict):
         self.schemaDict = {}
         self.http_status = None
         self.http_cause = None
         self.http_cause_is_json = False
 
-        status, content = api_access.post_installations(x_user_agent = context['x_user_agent'], 
+        status, content = api_access.post_installations(service_urls, x_user_agent = x_user_agent, 
         	secureToken = inputDict['secureToken'], 
         	timestamp = inputDict['timestamp'], 
         	installationId = inputDict['installationId'], 
@@ -52,4 +53,4 @@ class CreateInstallationMutation(graphene.Mutation):
    
     def mutate(self, input, context, info):
         input_dict = {'installationId' : input.get('installationId'), 'deviceId' : input.get('deviceId'), 'secureToken' : input.get('secureToken'), 'timestamp' : input.get('timestamp') }   
-        return CreateInstallationMutation(context, input_dict)
+        return CreateInstallationMutation(Helpers.get_service_urls(context), context['x_user_agent'], input_dict)

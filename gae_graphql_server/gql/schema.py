@@ -10,7 +10,7 @@ from mutations.update_installation_mutation import UpdateInstallationMutation
 class Queries(graphene.ObjectType):
 	
     #field authToken
-    authToken = graphene.String() 
+    authToken = graphene.String(description = 'this is the rememberMe token', deprecation_reason = 'not in v2') 
     def resolve_authToken(self, args, context, info):
         #logging.info('resolve_auth_token')
         return context['auth_token']

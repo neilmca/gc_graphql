@@ -9,8 +9,8 @@ from error_schema import ErrorsSchema
 
 class MeProfileSchema(BaseApiInvokingSchema):
 
-    def __init__(self, context):
-        BaseApiInvokingSchema.__init__(self, context, api_access.get_me_profile)     
+    def __init__(self, service_urls, x_user_agent, authToken):
+        BaseApiInvokingSchema.__init__(self, service_urls, x_user_agent, authToken, api_access.get_me_profile)     
 
     userUid = graphene.String() 
     def resolve_userUid(self, args, context, info):        

@@ -2,14 +2,14 @@ import logging
 from google.appengine.api import urlfetch
 
 
-def fetch_post(url, auth_token, x_user_agent, query):
+def fetch_post(gql_url, core_server_url, pls_server_url, x_user_agent, query):
 	try:
 	    #form_data = urllib.urlencode(UrlPostHandler.form_fields)
 	    
-	    headers = {'X-User-Agent': x_user_agent, 'Authorization' : 'Bearer ' + auth_token}
+	    headers = {'X-User-Agent': x_user_agent, 'core_server_url' : core_server_url, 'pls_server_url' : pls_server_url}
 	    
 	    result = urlfetch.fetch(
-	        url=url,
+	        url=gql_url,
 	        payload=query,
 	        method=urlfetch.POST,
 	        headers=headers)

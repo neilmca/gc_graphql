@@ -9,11 +9,11 @@ from playlistfeeditem_schema import PlaylistFeedItemSchema
 
 class MeFollowedPlaylistsSchema(BaseApiInvokingSchema):
 
-    def __init__(self, context):
-        BaseApiInvokingSchema.__init__(self, context)  # don't get base class to call API as we need to do two API calls
+    def __init__(self, service_urls, x_user_agent, auth_token):
+        BaseApiInvokingSchema.__init__(self, service_urls, x_user_agent, auth_token)  # don't get base class to call API as we need to do two API calls
 
         #get followed playlists
-        status, content = api_access.get_me_follows(context['auth_token'], context['x_user_agent'])
+        status, content = api_access.get_me_follows(service_urls, auth_token, x_user_agent)
         if status == 200:
             self.schemaDict = json.loads(content)
         else:
@@ -29,7 +29,7 @@ class MeFollowedPlaylistsSchema(BaseApiInvokingSchema):
         playlistIds = self.schemaDict.get('followedPlaylistFeeds')
         self.playlist_feed_details_dict = {}
         if playlistIds:
-            status, content = api_access.get_playlist_feeds(context['auth_token'], context['x_user_agent'], playlistIds)
+            status, content = api_access.get_playlist_feeds(service_urls, auth_token, x_user_agent, playlistIds)
             if status == 200:
                 self.playlist_feed_details_dict = json.loads(content)
             else:

@@ -9,11 +9,11 @@ import json
 
 class MeAccountCheckSchema(BaseApiInvokingSchema):
 
-    def __init__(self, context, user_token, timestamp, user_name, device_uid):
-        BaseApiInvokingSchema.__init__(self, context, None)     
+    def __init__(self, service_urls, x_user_agent, user_token, timestamp, user_name, device_uid):
+        BaseApiInvokingSchema.__init__(self, service_urls, x_user_agent, None)     
 
         
-        status, content = api_access.get_acc_check(user_token = user_token, x_user_agent = context['x_user_agent'], timestamp = timestamp, user_name = user_name, device_uid = device_uid)
+        status, content = api_access.get_acc_check(service_urls, user_token = user_token, x_user_agent = x_user_agent, timestamp = timestamp, user_name = user_name, device_uid = device_uid)
         if status == 200:
              resp = json.loads(content)
              resp = resp.get('response')

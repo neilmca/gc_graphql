@@ -6,14 +6,14 @@ import json
 class BaseApiInvokingSchema(graphene.ObjectType):
 
 
-    def __init__(self, context, fetch_func = None):
+    def __init__(self, service_urls, x_user_agent, auth_token, fetch_func = None):
         self.schemaDict = {}
         self.http_status = None
         self.http_cause = None
         self.http_cause_is_json = False
 
         if fetch_func:
-            status, content = fetch_func(context['auth_token'], context['x_user_agent'])
+            status, content = fetch_func(service_urls, auth_token, x_user_agent)
             if status == 200:
                 self.schemaDict = json.loads(content)
             else:

@@ -8,8 +8,8 @@ from mesubscriptiontieritem_schema import MeSubscriptionsTiersItemSchema
 
 class MeSubscriptionsSchema(BaseApiInvokingSchema):
 
-    def __init__(self, context):
-        BaseApiInvokingSchema.__init__(self, context, api_access.get_me_subscriptions)  
+    def __init__(self, service_urls, x_user_agent, authToken):
+        BaseApiInvokingSchema.__init__(self, service_urls, x_user_agent, authToken, api_access.get_me_subscriptions)  
 
     serverTime = graphene.String()
     def resolve_serverTime(self, args, context, info):        
