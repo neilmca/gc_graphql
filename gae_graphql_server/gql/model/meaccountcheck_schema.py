@@ -38,6 +38,12 @@ class MeAccountCheckSchema(BaseApiInvokingSchema):
         #logging.info('resolve_userUid = %s' % self.schemaDict)
         return self.schemaDict.get('rememberMeToken')
 
+    uuid = graphene.String() 
+    def resolve_uuid(self, args, context, info):        
+        #logging.info('resolve_userUid = %s' % self.schemaDict)
+        return self.schemaDict.get('uuid')
+
+
     
 
     errors = graphene.Field(ErrorsSchema) 
